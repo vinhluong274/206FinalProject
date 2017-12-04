@@ -3,11 +3,16 @@ import requests
 import sqlite3
 
 
-token = "EAACEdEose0cBAHFvkitBDoI9h6Ij8UnDyw06AOTduOPoyfuYLSn1PhWty7CkAktMChb0mdZCXZAFvA47hYQZBFXNYnEscCOfqlh20VheNrVzNjWZBwNq4UvdTZBwaG8JDwrl9ZAKpn4VWlv4JZCxSZCv2ToSja0U1YyrW8kF1w7ZBZAb8bVFZBvQ5wGo3SP4XMowsAZD"
-graph = facebook.GraphAPI(token)
+token = "EAACEdEose0cBAJ7K8VE8dINY3uUwjoquo04Q1IBS4AYDnFRDhdMWfViAX0uf2QCE0EcUxOyvhVjoraf2tZAgwsjKtvnKZBwlTXlWwxFb8r3MkvVxhKlAnMZCoIF0ZBwBNL10lyif7DQXwACJoWrRrk8q1xSfQV7NsAdNqnvIVaZCm3M5hvWXRx4lmDpnZAaP0ZD"
+graph = facebook.GraphAPI(token, version='2.1')
 
-friends = graph.get_connections(id="me", connection_name="posts")
+friends = graph.get_connections(id="me", connection_name="friends")
 
-print(friends)
-for friend in friends:
-    print(friend)
+cachefile = open("FB-Cache.txt", "w")
+string = str(friends)
+cachefile.write(string)
+
+names = []
+
+for item in friends["data"]:
+    print(item["id"])
