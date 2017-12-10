@@ -108,15 +108,24 @@ print("Finished writing to database.")
 
 
 #VISUALIZATION IF DATA
+#establishes credentials for connection to plotly
 plotly.tools.set_credentials_file(username='vinhnillarice', api_key='if3NnzKFAELnEqDijVJ0')
 
-trace0 = Scatter(
-    x=[1, 2, 3, 4],
-    y=[10, 15, 13, 17]
+#We need to access the database and retrieve frequency of activity for each day of the week
+#This will make a list of tuples with the respective weekday for each occurence of it in the DB
+activity = cur.execute("SELECT weekday FROM FbPosts").fetchall()
+monday = activity.count(("Monday",))#storing the count of times each day occurs
+tuesday = activity.count(("Tuesday",))
+wednesday = activity.count(("Wednesday",))
+thursday = activity.count(("Thursday",))
+friday = activity.count(("Friday",))
+saturday = activity.count(("Saturday",))
+sunday = activity.count(("Sunday",))
+
+#creation of the graph. X Axis will include weekdays and Y holds the frequency established above.
+trace1 = Bar(
+    x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
+    y=[monday, tuesday, wednesday, thursday, friday, saturday, sunday]
 )
-trace1 = Scatter(
-    x=[1, 2, 3, 4],
-    y=[16, 5, 11, 9]
-)
-data = Data([trace0, trace1])
-py.plot(data, filename = 'basic-line')
+data = Data([trace1])
+py.plot(data, filename = 'bar-chart')#plot the data publicly online
