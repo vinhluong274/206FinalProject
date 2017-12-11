@@ -8,9 +8,9 @@ import plotly.plotly as py
 from plotly.graph_objs import *
 
 
-token = input("\nPlease copy and paste your Facebook Access token from https://developers.facebook.com/tools/explorer\n>  ")
+# token = input("\nPlease copy and paste your Facebook Access token from https://developers.facebook.com/tools/explorer\n>  ")
 # API Connection Information; Establishes a connection to FB's Graph API
-# token="EAACEdEose0cBAB79NtGPEdzBfg5MlYdZBpkZCiIfwYgJyF9ChLM2Lcc0Wj7uLwErk8pIZBg579yH38pbeF1wjsqGr991UxGUjEFN7TZCU1Rtqn6CGJ1HUKC2EAxCP2R518cAgpP2QFYDJ3rDajrVopOYkK5SA0L09wdzWkA7KZBRRAlhoDjFTvnxFmxUpK8gZD"
+token="EAACEdEose0cBAB79NtGPEdzBfg5MlYdZBpkZCiIfwYgJyF9ChLM2Lcc0Wj7uLwErk8pIZBg579yH38pbeF1wjsqGr991UxGUjEFN7TZCU1Rtqn6CGJ1HUKC2EAxCP2R518cAgpP2QFYDJ3rDajrVopOYkK5SA0L09wdzWkA7KZBRRAlhoDjFTvnxFmxUpK8gZD"
 graph = facebook.GraphAPI(token)
 CACHE_FNAME = "facebook-cache.json" #Cache filename to store requested data from FB API
 
@@ -114,25 +114,92 @@ for post in postsdata["posts"]:
 conn.commit()
 print("Finished writing to database.")
 
+Mdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+Mday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+Mnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+Mdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
 
-#VISUALIZATION IF DATA
-#establishes credentials for connection to plotly
+TUdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Tuesday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+TUday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Tuesday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+TUnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Tuesday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+TUdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Tuesday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
+
+Wdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Wednesday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+Wday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Wednesday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+Wnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Wednesday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+Wdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Wednesday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
+
+THdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Thursday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+THday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Thursday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+THnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Thursday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+THdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Thursday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
+
+Fdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Friday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+Fday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Friday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+Fnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Friday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+Fdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Friday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
+
+SATdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Saturday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+SATday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Saturday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+SATnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Saturday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+SATdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Saturday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
+
+SUNdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Sunday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
+SUNday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Sunday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
+SUNnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Sunday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
+SUNdusk = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Sunday' AND time_posted BETWEEN '18:00:00' AND '23:59:59'").fetchall())[0][0]
+
+
+
+
+
+# VISUALIZATION IF DATA
+# establishes credentials for connection to plotly
 plotly.tools.set_credentials_file(username='vinhnillarice', api_key='if3NnzKFAELnEqDijVJ0')
 
-#We need to access the database and retrieve frequency of activity for each day of the week
-#This will make a list of tuples with the respective weekday for each occurence of it in the DB
-activity = cur.execute("SELECT weekday FROM FbPosts").fetchall()
-monday = activity.count(("Monday",))#storing the count of times each day occurs
-tuesday = activity.count(("Tuesday",))
-wednesday = activity.count(("Wednesday",))
-thursday = activity.count(("Thursday",))
-friday = activity.count(("Friday",))
-saturday = activity.count(("Saturday",))
-sunday = activity.count(("Sunday",))
-
-trace1 = Bar(
+Dawn = Bar(
     x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
-    y=[monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+    y=[Mdawn, TUdawn, Wdawn, THdawn, Fdawn, SATdawn, SUNdawn],
+    name='12AM - 5:59AM'
 )
-data = Data([trace1])
-py.plot(data, filename = 'facebook-posts-bar-chart')#plot the data publicly online
+Day = Bar(
+    x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
+    y=[Mday, TUday, Wday, THday, Fday, SATday, SUNday],
+    name='6AM - 11:59AM'
+)
+Noon = Bar(
+    x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
+    y=[Mnoon, TUnoon, Wnoon, THnoon, Fnoon, SATnoon, SUNnoon],
+    name='12PM - 5:59PM'
+)
+Dusk = Bar(
+    x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
+    y=[Mdusk, TUdusk, Wdusk, THdusk, Fdusk, SATdusk, SUNdusk],
+    name='6PM - 11:59PM'
+)
+
+data = [Dawn, Day, Noon, Dusk]
+layout = Layout(
+    barmode='group'
+)
+
+fig = Figure(data=data, layout=layout)
+py.plot(fig, filename='grouped-bar')
+#
+# #We need to access the database and retrieve frequency of activity for each day of the week
+# #This will make a list of tuples with the respective weekday for each occurence of it in the DB
+# activity = cur.execute("SELECT weekday FROM FbPosts").fetchall()
+# monday = activity.count(("Monday",))#storing the count of times each day occurs
+# tuesday = activity.count(("Tuesday",))
+# wednesday = activity.count(("Wednesday",))
+# thursday = activity.count(("Thursday",))
+# friday = activity.count(("Friday",))
+# saturday = activity.count(("Saturday",))
+# sunday = activity.count(("Sunday",))
+#
+# trace1 = Bar(
+#     x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
+#     y=[monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+# )
+# data = Data([trace1])
+# py.plot(data, filename = 'facebook-posts-bar-chart')#plot the data publicly online

@@ -9,14 +9,16 @@ from plotly.graph_objs import *
 
 #Dark Sky API Key
 accessKey = "9f0f97798ec11a765d3ffcb52c72aef8"
-
-city = input("Please enter in a name of a city: ")
-results = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='+ city)
-jsonResults = results.json()
-coordinates = jsonResults['results'][0]['geometry']['location']
-lat = str(coordinates["lat"])
-lng =str(coordinates["lng"])
-# print("Please enter a valid city name!")
+try:
+    city = input("Please enter in a name of a city: ")
+    results = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='+ city)
+    jsonResults = results.json()
+    coordinates = jsonResults['results'][0]['geometry']['location']
+    lat = str(coordinates["lat"])
+    lng =str(coordinates["lng"])
+except:
+    print("Please enter a valid city name!")
+    exit()
 
 
 CACHE_FNAME = 'darksky-cache.json'
@@ -105,7 +107,7 @@ snow = icons.count(('snow',))
 print("Graphing data and redirecting browser...")
 plotly.tools.set_credentials_file(username='vinhnillarice', api_key='if3NnzKFAELnEqDijVJ0')
 trace1 = Bar(
-    x=["Clear Day", "Rain", "Partly Cloudy", "Fog", "Wind","Snow"],
+    x=["Sunny", "Rain", "Partly Cloudy", "Fog", "Wind","Snow"],
     y=[clearDay, rain, partlyCloudy, fog, wind, snow]
 )
 data = Data([trace1])

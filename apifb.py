@@ -9,7 +9,7 @@ from plotly.graph_objs import *
 
 
 #API Connection Information; Establishes a connection to FB's Graph API
-token="EAACEdEose0cBAKBajheFgdZArN1LKbVZCMVCkFevJZAzXGbkk3ayesAslHUF0Xh6MOVZBz0ngzNMsDD9vZBhENaKtuvkiPNuaq5bQtmOqOZB67tV3nbZBmZAuH7Ky1QkcEI0Rv8AtzjxRudzrjmBdVKz2m4hVjGLSk1DXvtnItu6A8bhAt4ohagc5Omw3iuvWh0ZD"
+token="EAACEdEose0cBAL9okEGZAPfPBWjKOkCZAUKIXFR7JS6gOYkCO5XTC3wOAG3uY1mYx3kPn4lk4nB7wCEr2UIk0jRe43VTS3j4q9vdz1hOgXIZAgQLnHLmUYCYTDSSFqG4FzAtx2odMpNQZAIs5j9eVGrrQ7kAZA19wFCtvvZAGMQf2lQKlULkQpxZCZAskUiO1RgZD"
 graph = facebook.GraphAPI(token, version="2.1")
 CACHE_FNAME = "facebook-cache.json" #Cache filename to store requested data from FB API
 
