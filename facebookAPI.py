@@ -7,10 +7,9 @@ import plotly
 import plotly.plotly as py
 from plotly.graph_objs import *
 
-
-# token = input("\nPlease copy and paste your Facebook Access token from https://developers.facebook.com/tools/explorer\n>  ")
+#Makes sure the access token is not expired.
+token = input("\nPlease copy and paste your Facebook Access token from https://developers.facebook.com/tools/explorer\n>  ")
 # API Connection Information; Establishes a connection to FB's Graph API
-token="EAACEdEose0cBAB79NtGPEdzBfg5MlYdZBpkZCiIfwYgJyF9ChLM2Lcc0Wj7uLwErk8pIZBg579yH38pbeF1wjsqGr991UxGUjEFN7TZCU1Rtqn6CGJ1HUKC2EAxCP2R518cAgpP2QFYDJ3rDajrVopOYkK5SA0L09wdzWkA7KZBRRAlhoDjFTvnxFmxUpK8gZD"
 graph = facebook.GraphAPI(token)
 CACHE_FNAME = "facebook-cache.json" #Cache filename to store requested data from FB API
 
@@ -24,6 +23,7 @@ except:
 
 CACHE_DICTION = CACHE_DICTION
 
+#this get's the Facebook user's ID so we can check if the user is in the cache or if we need to make a new request.
 nameURL = "https://graph.facebook.com/v2.11/me?access_token=" + token
 nameDict = requests.get(nameURL).json()
 User = json.dumps(nameDict)
@@ -34,11 +34,11 @@ user_id_str = str(user_id)
 #DEFINE A FUNCTION TO GET USER POSTS FROM FB
 #accepts no arguments and will cache all user posts
 def getFbPostsWithCaching(cache):
-    if user_id_int in cache.values():
+    if user_id_int in cache.values(): #check to see if the user id is in the cache
         print("Data was in the cache")
         return cache
     else:
-        print("Making a request for new data...\n")
+        print("Making a request for new data...\n") #if not make a new request
         posts = graph.get_connections(id="me", connection_name="posts")
         f = open(CACHE_FNAME, "w")
         f.write('{"user_id":' + user_id_str + ',"posts": [')
@@ -88,8 +88,8 @@ for post in postsdata["posts"]:
             count+=1
             status = post["message"]
             post_id_str = post["id"]
-            date = post['created_time'][0:10]
-            time = post["created_time"][11:19]
+            date = post['created_time'][0:10] #the time is given in datetime I wanted to break it up into two separate data points.
+            time = post["created_time"][11:19] #time is created to be used more easily later.
             dates = date.split("-")
             year = int(dates[0])
             month = int(dates[1])
@@ -114,6 +114,8 @@ for post in postsdata["posts"]:
 conn.commit()
 print("Finished writing to database.")
 
+#EXTRA DATA POINTS:
+#this creates morning, afternoon, evening, and nighttime activity data points
 Mdawn = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '00:00:00' AND '05:59:59'").fetchall())[0][0]
 Mday = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '06:00:00' AND '11:59:59'").fetchall())[0][0]
 Mnoon = (cur.execute("SELECT COUNT(time_posted) FROM FbPosts WHERE weekday='Monday' AND time_posted BETWEEN '12:00:00' AND '17:59:59'").fetchall())[0][0]
@@ -188,18 +190,18 @@ py.plot(fig, filename='grouped-bar')
 #
 # #We need to access the database and retrieve frequency of activity for each day of the week
 # #This will make a list of tuples with the respective weekday for each occurence of it in the DB
-# activity = cur.execute("SELECT weekday FROM FbPosts").fetchall()
-# monday = activity.count(("Monday",))#storing the count of times each day occurs
-# tuesday = activity.count(("Tuesday",))
-# wednesday = activity.count(("Wednesday",))
-# thursday = activity.count(("Thursday",))
-# friday = activity.count(("Friday",))
-# saturday = activity.count(("Saturday",))
-# sunday = activity.count(("Sunday",))
-#
-# trace1 = Bar(
-#     x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
-#     y=[monday, tuesday, wednesday, thursday, friday, saturday, sunday]
-# )
-# data = Data([trace1])
-# py.plot(data, filename = 'facebook-posts-bar-chart')#plot the data publicly online
+activity = cur.execute("SELECT weekday FROM FbPosts").fetchall()
+monday = activity.count(("Monday",))#storing the count of times each day occurs
+tuesday = activity.count(("Tuesday",))
+wednesday = activity.count(("Wednesday",))
+thursday = activity.count(("Thursday",))
+friday = activity.count(("Friday",))
+saturday = activity.count(("Saturday",))
+sunday = activity.count(("Sunday",))
+
+trace1 = Bar(
+    x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"],
+    y=[monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+)
+data2 = Data([trace1])
+py.plot(data2, filename = 'facebook-posts-bar-chart')#plot the data publicly online
